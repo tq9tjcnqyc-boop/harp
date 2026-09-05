@@ -1,0 +1,51 @@
+[package]
+name = "harp"
+version = "0.1.1"
+edition = "2024"
+description = "A terminal music player for FLAC and MP3"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+aes = "0.8"
+base64 = "0.22"
+clap = { version = "4.5", features = ["derive"] }
+crossterm = "0.29"
+directories = "6.0"
+flate2 = "1"
+hex = "0.4"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp"] }
+lofty = "0.24"
+md-5 = "0.10"
+pinyin = "0.10"
+qrcode = "0.14"
+rand = "0.9"
+ratatui = "0.30"
+sha2 = "0.10"
+ratatui-image = { version = "11.0", default-features = false, features = ["crossterm"] }
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+rodio = { version = "0.22", default-features = false, features = ["playback", "symphonia-flac", "symphonia-mp3"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+unicode-segmentation = "1.13"
+unicode-width = "0.2"
+terminal-colorsaurus = "1.0"
+walkdir = "2.5"
+
+[dev-dependencies]
+tempfile = "3.20"
+
+# Windows 下量终端 cell 像素尺寸(GetCurrentConsoleFontEx), 仅 windows 编译时引入
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_System_Console"] }
+
+[profile.dev]
+# 关掉 debuginfo：本项目依赖多（ratatui/rodio/image/lofty），每 crate 生成+组装调试符号
+# 是大头，关掉后编译显著变快。代价是断点看不到源码/变量。
+# 若想要"崩溃能定位行号但轻量"，改成 debug = "line-tables-only"。
+debug = 0
+
+[profile.release]
+lto = "thin"
+strip = true
+codegen-units = 1

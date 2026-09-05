@@ -1,0 +1,6 @@
+/target/
+/dist/
+*.flac
+*.tmp
+.DS_Store
+/snapshot-push.sh
